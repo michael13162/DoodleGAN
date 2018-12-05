@@ -22,6 +22,8 @@ import sys
 
 import numpy as np
 
+import pdb
+
 class RandomWeightedAverage(_Merge):
     """Provides a (random) weighted average between real and generated image samples"""
     def _merge_function(self, inputs):
@@ -131,6 +133,9 @@ class WGANGP():
         model.add(Reshape((7, 7, 128)))
         model.add(UpSampling2D())
         model.add(Conv2D(128, kernel_size=4, padding="same"))
+
+        # pdb.set_trace()
+
         model.add(BatchNormalization(momentum=0.8))
         model.add(Activation("relu"))
         model.add(UpSampling2D())
