@@ -240,7 +240,7 @@ class WGANGP():
                 axs[i,j].imshow(gen_imgs[cnt, :,:,0], cmap='gray')
                 axs[i,j].axis('off')
                 cnt += 1
-        fig.savefig("images/mnist_%d.png" % epoch)
+        fig.savefig("data/images/mnist_%d.png" % epoch)
         plt.close()
 
 

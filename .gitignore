@@ -102,3 +102,16 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# GAN Additions
+*/data/images/*.png
+*/data/images/*.jpg
+*/*.jpg
+*/*.png
+*.json
+*.h5
+*.hdf5
+.DS_Store
+*/datasets
+
+__pycache__
