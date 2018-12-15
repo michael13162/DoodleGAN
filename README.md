@@ -85,6 +85,7 @@ _________________________________________________________________
 ```
 
 Initially, the generated cat images aren't very good.
+
 ![simple_bad](https://user-images.githubusercontent.com/14242505/50039096-12076880-ffe1-11e8-90d9-082f49ab66a2.png)
 
 After many epochs of training, they get much better.
@@ -92,12 +93,13 @@ After many epochs of training, they get much better.
 ![simple_good](https://user-images.githubusercontent.com/14242505/50039097-16cc1c80-ffe1-11e8-92f4-18b94e04c9c5.png)
 
 The loss over the epochs is shown.  While the generated cats are noticeable better than before, they are still not what someone would probably actually draw.
+
 ![simple_loss](https://user-images.githubusercontent.com/14242505/50039098-1b90d080-ffe1-11e8-971e-c731a34dd427.png)
 
 
 # DCGAN
 
-The DCGAN performs much better.  DCGAN.ipynb contains a more sophisticated implementation of a GAN.  The class of doodles we chose to use are also cats for comparison reasons.  The architecture is similar with convolutional layers and batch normalization layers add in.  The architecture is shown below.
+The DCGAN performs much better.  DCGAN.ipynb contains a more sophisticated implementation of a GAN.  The class of doodles we chose to use are also cats for comparison reasons.  The architecture is similar with convolutional layers and batch normalization layers added in.  The architecture is shown below.
 
 ```
 _________________________________________________________________
