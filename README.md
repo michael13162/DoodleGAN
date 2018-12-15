@@ -179,13 +179,14 @@ After training many epochs, it gets considerably better!
 
 ![good_conv](https://user-images.githubusercontent.com/14242505/50039235-49771480-ffe3-11e8-8cdd-8893c7839946.png)
 
-The loss over epochs is shown.
+The loss over epochs is shown. The generator loss seems to be diverging, however we were visually inspecting the generated samples on each epoch and the results were improving. 
 
 ![conv_loss](https://user-images.githubusercontent.com/14242505/50039236-4d0a9b80-ffe3-11e8-8176-c27411a68c92.png)
 
 # Optimizations
 
-Noise was added to the models to help stability.  A technical discussion on instance noise can be found here: https://www.inference.vc/instance-noise-a-trick-for-stabilising-gan-training/
+Gaussian noise was added to the images batches for the discriminator to help stability.  A technical discussion on instance noise can be found here: https://www.inference.vc/instance-noise-a-trick-for-stabilising-gan-training/
+
 
 Many other optimizations were implemented as well.  Specifically, optimizations 1, 3, 4, 5, 6, 9, 10, and 13 were used from: https://github.com/soumith/ganhacks
 
