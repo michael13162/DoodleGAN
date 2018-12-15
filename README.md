@@ -188,7 +188,60 @@ The loss over epochs is shown. The generator loss seems to be diverging, however
 Gaussian noise was added to the images batches for the discriminator to help stability.  A technical discussion on instance noise can be found here: https://www.inference.vc/instance-noise-a-trick-for-stabilising-gan-training/
 
 
-Many other optimizations were implemented as well.  Specifically, optimizations 1, 3, 4, 5, 6, 9, 10, and 13 were used from: https://github.com/soumith/ganhacks
+Many other optimizations were implemented as well.  Specifically, optimizations found here (https://github.com/soumith/ganhacks) are used.  The relevant sections are copied from their README:
+
+#### 1. Normalize the inputs
+
+- normalize the images between -1 and 1
+- Tanh as the last layer of the generator output
+
+#### 3: Use a spherical Z
+- Dont sample from a Uniform distribution
+- Sample from a gaussian distribution
+- When doing interpolations, do the interpolation via a great circle, rather than a straight line from point A to point B
+- Tom White's [Sampling Generative Networks](https://arxiv.org/abs/1609.04468) ref code https://github.com/dribnet/plat has more details
+
+
+#### 4: BatchNorm
+
+- Construct different mini-batches for real and fake, i.e. each mini-batch needs to contain only all real images or all generated images.
+- when batchnorm is not an option use instance normalization (for each sample, subtract mean and divide by standard deviation).
+
+#### 5: Avoid Sparse Gradients: ReLU, MaxPool
+- the stability of the GAN game suffers if you have sparse gradients
+- LeakyReLU = good (in both G and D)
+- For Downsampling, use: Average Pooling, Conv2d + stride
+- For Upsampling, use: PixelShuffle, ConvTranspose2d + stride
+  - PixelShuffle: https://arxiv.org/abs/1609.05158
+
+#### 6: Use Soft and Noisy Labels
+
+- Label Smoothing, i.e. if you have two target labels: Real=1 and Fake=0, then for each incoming sample, if it is real, then replace the label with a random number between 0.7 and 1.2, and if it is a fake sample, replace it with 0.0 and 0.3 (for example).
+  - Salimans et. al. 2016
+- make the labels the noisy for the discriminator: occasionally flip the labels when training the discriminator
+
+#### 9: Use the ADAM Optimizer
+
+- optim.Adam rules!
+  - See Radford et. al. 2015
+- Use SGD for discriminator and ADAM for generator
+
+#### 10: Track failures early
+
+- D loss goes to 0: failure mode
+- check norms of gradients: if they are over 100 things are screwing up
+- when things are working, D loss has low variance and goes down over time vs having huge variance and spiking
+- if loss of generator steadily decreases, then it's fooling D with garbage (says martin)
+
+#### 13: Add noise to inputs, decay over time
+
+- Add some artificial noise to inputs to D (Arjovsky et. al., Huszar, 2016)
+  - http://www.inference.vc/instance-noise-a-trick-for-stabilising-gan-training/
+  - https://openreview.net/forum?id=Hk4_qw5xe
+- adding gaussian noise to every layer of generator (Zhao et. al. EBGAN)
+  - Improved GANs: OpenAI code also has it (commented out)
+
+
 
 # Classification
 
