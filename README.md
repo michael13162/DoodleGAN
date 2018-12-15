@@ -91,10 +91,111 @@ After many epochs of training, they get much better.
 
 ![simple_good](https://user-images.githubusercontent.com/14242505/50039097-16cc1c80-ffe1-11e8-92f4-18b94e04c9c5.png)
 
-As you can see, the loss of the discriminator and generator converge.  While the generated cats are noticeable better than before, they are still not what someone would probably actually draw.
+The loss over the epochs is shown.  While the generated cats are noticeable better than before, they are still not what someone would probably actually draw.
 ![simple_loss](https://user-images.githubusercontent.com/14242505/50039098-1b90d080-ffe1-11e8-971e-c731a34dd427.png)
 
 
 # DCGAN
 
-The DCGAN performs much better.
+The DCGAN performs much better.  DCGAN.ipynb contains a more sophisticated implementation of a GAN.  The class of doodles we chose to use are also cats for comparison reasons.  The architecture is similar with convolutional layers and batch normalization layers add in.  The architecture is shown below.
+
+```
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_66 (Conv2D)           (None, 14, 14, 64)        1664      
+_________________________________________________________________
+leaky_re_lu_59 (LeakyReLU)   (None, 14, 14, 64)        0         
+_________________________________________________________________
+dropout_37 (Dropout)         (None, 14, 14, 64)        0         
+_________________________________________________________________
+conv2d_67 (Conv2D)           (None, 7, 7, 128)         204928    
+_________________________________________________________________
+leaky_re_lu_60 (LeakyReLU)   (None, 7, 7, 128)         0         
+_________________________________________________________________
+dropout_38 (Dropout)         (None, 7, 7, 128)         0         
+_________________________________________________________________
+flatten_19 (Flatten)         (None, 6272)              0         
+_________________________________________________________________
+dense_32 (Dense)             (None, 1)                 6273      
+=================================================================
+Total params: 212,865
+Trainable params: 212,865
+Non-trainable params: 0
+_________________________________________________________________
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_33 (Dense)             (None, 6272)              633472    
+_________________________________________________________________
+reshape_14 (Reshape)         (None, 7, 7, 128)         0         
+_________________________________________________________________
+batch_normalization_26 (Batc (None, 7, 7, 128)         512       
+_________________________________________________________________
+up_sampling2d_22 (UpSampling (None, 14, 14, 128)       0         
+_________________________________________________________________
+conv2d_68 (Conv2D)           (None, 14, 14, 128)       147584    
+_________________________________________________________________
+leaky_re_lu_61 (LeakyReLU)   (None, 14, 14, 128)       0         
+_________________________________________________________________
+batch_normalization_27 (Batc (None, 14, 14, 128)       512       
+_________________________________________________________________
+up_sampling2d_23 (UpSampling (None, 28, 28, 128)       0         
+_________________________________________________________________
+conv2d_69 (Conv2D)           (None, 28, 28, 64)        73792     
+_________________________________________________________________
+leaky_re_lu_62 (LeakyReLU)   (None, 28, 28, 64)        0         
+_________________________________________________________________
+batch_normalization_28 (Batc (None, 28, 28, 64)        256       
+_________________________________________________________________
+conv2d_70 (Conv2D)           (None, 28, 28, 1)         577       
+=================================================================
+Total params: 856,705
+Trainable params: 856,065
+Non-trainable params: 640
+_________________________________________________________________
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+input_41 (InputLayer)        (None, 100)               0         
+_________________________________________________________________
+Generator (Model)            (None, 28, 28, 1)         856705    
+_________________________________________________________________
+Discriminator (Model)        (None, 1)                 212865    
+=================================================================
+Total params: 1,069,570
+Trainable params: 856,065
+Non-trainable params: 213,505
+_________________________________________________________________
+```
+
+At first, the generated cat drawings don't look very good.
+
+![bad_conv](https://user-images.githubusercontent.com/14242505/50039234-454af700-ffe3-11e8-9d6d-0e258adc18d3.png)
+
+After training many epochs, it gets considerably better!  
+
+![good_conv](https://user-images.githubusercontent.com/14242505/50039235-49771480-ffe3-11e8-8cdd-8893c7839946.png)
+
+The loss over epochs is shown.
+
+![conv_loss](https://user-images.githubusercontent.com/14242505/50039236-4d0a9b80-ffe3-11e8-8176-c27411a68c92.png)
+
+# Optimizations
+
+Noise was added to the models to help stability.  A technical discussion on instance noise can be found here: https://www.inference.vc/instance-noise-a-trick-for-stabilising-gan-training/
+
+# Classification
+
+We also trained a classifier on 10 classes of doodles.  The notebook can be found at CNNclassifier.ipynb.  After only 3 epochs, it was able to acheive an accuracy of 0.7972!
+
+```
+Epoch 1/3
+238515/238515 [==============================] - 106s 443us/step - loss: 1.2028 - acc: 0.6102
+Epoch 2/3
+238515/238515 [==============================] - 105s 442us/step - loss: 0.7889 - acc: 0.7571
+Epoch 3/3
+238515/238515 [==============================] - 105s 439us/step - loss: 0.6958 - acc: 0.7972
+```
+
+If we had more time, we would experiment with adding the generated cat samples into the training data for the CNN classifier.  It would be interesting to see if GANs can be used as a way to augment data and help classification.  This can be especially useful when the number of examples for a certain class is very limited.  By learning how to generate new examples from this under-represented class, a classifier might be able to learn how to recognize that class better.
