@@ -187,6 +187,8 @@ The loss over epochs is shown.
 
 Noise was added to the models to help stability.  A technical discussion on instance noise can be found here: https://www.inference.vc/instance-noise-a-trick-for-stabilising-gan-training/
 
+Many other optimizations were implemented as well.  Specifically, optimizations 1, 3, 4, 5, 6, 9, 10, and 13 were used from: https://github.com/soumith/ganhacks
+
 # Classification
 
 We also trained a classifier on 10 classes of doodles.  The notebook can be found at CNNclassifier.ipynb.  After only 3 epochs, it was able to acheive an accuracy of 0.7972!
